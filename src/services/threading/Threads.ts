@@ -1,8 +1,5 @@
-import {getReturningGenericPath, queries} from "../../utils/globals/queries";
-
-interface IDictionary<T> {
-    [id: string]: T;
-}
+import {queries} from "./Queries";
+import {IDictionary} from "../../types/IDictionary";
 
 /**
  * Class used for communication between background and foreground
@@ -30,7 +27,7 @@ export default class Threads {
      * @param args {[any]}
      * @param callbackFn {Function}
      */
-    static request({query, args, callbackFn} : {query: string, args: any[], callbackFn: Function}) {
+    static request({query, args, callbackFn}: { query: string, args: any[], callbackFn: Function }) {
         sendScanQuery({query, args})
         registerListener({query: getReturningQuery(query), callbackFn})
     }
@@ -43,6 +40,7 @@ export default class Threads {
  * @return {String}
  */
 function getReturningQuery(query: string) {
+    // @ts-ignore
     return queries.toForeground[Object.keys(queries.toBackground).find((key) => queries.toBackground[key] === query)]
 }
 
@@ -52,7 +50,7 @@ function getReturningQuery(query: string) {
  * @param queryLocation the query you want to execute
  * @param args arguments you want to pass to the scan function.
  */
-function sendScanQuery({query, args} : {query: string, args: any[]}) {
+function sendScanQuery({query, args}: { query: string, args: any[] }) {
     chrome.runtime.sendMessage({
         action: query,
         data: args
@@ -65,6 +63,6 @@ function sendScanQuery({query, args} : {query: string, args: any[]}) {
  * @param query
  * @param callbackFn
  */
-function registerListener({query, callbackFn} : {query: string, callbackFn: Function}) {
+function registerListener({query, callbackFn}: { query: string, callbackFn: Function }) {
     Threads.activeListeners[query] = callbackFn;
 }
