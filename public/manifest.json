@@ -1,19 +1,19 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "version": "0.0.1",
-  "short_name": "React App",
+  "short_name": "Moments",
   "name": "Create React App Sample",
   "description": "Sample application showing how to create an extension with Create React App",
-  "browser_action": {
+  "action": {
     "default_title": "CRE",
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["background.bundle.js"]
+    "service_worker": "background.bundle.js"
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [ "*://*.youtube.com/*" ],
       "js": ["contentScript.bundle.js"]
     }
   ],
@@ -24,5 +24,8 @@
   },
   "options_page": "options.html",
   "permissions": ["activeTab"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": {
+    "script-src": "self unsafe-eval",
+    "object-src": "self"
+  }
 }
