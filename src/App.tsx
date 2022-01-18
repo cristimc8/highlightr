@@ -1,14 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-import {Store} from "webext-redux";
-import {connect, Provider, useSelector} from "react-redux";
-import {ports} from "./constants/ports";
+import {useSelector} from "react-redux";
 import {Main} from "./popup/components/Main";
 import {selectBookmarkedVideos} from "./redux/selectors/bookmarkVideoSelectors";
 
-function App(props: any) {
+function App() {
 
     const videos = useSelector(selectBookmarkedVideos)
 

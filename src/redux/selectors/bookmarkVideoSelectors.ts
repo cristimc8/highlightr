@@ -3,5 +3,7 @@
  * Retreives the bookmarked videos
  * @param state
  */
-export const selectBookmarkedVideos = (state: any) =>
+import {BookmarkedVideo} from "../../models/BookmarkedVideo";
+
+export const selectBookmarkedVideos = (state: any): BookmarkedVideo[] =>
     state.bookmarkVideoReducer?.bookmarkedVideos

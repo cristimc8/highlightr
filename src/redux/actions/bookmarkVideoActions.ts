@@ -1,8 +1,10 @@
+import {BookmarkedVideo} from "../../models/BookmarkedVideo";
+
 /**
  * Action for adding a new bookmark based on a url
- * @param videoUrl
+ * @param bookmarkedVideoObj
  */
-export const addNewBookmark = (videoUrl: string) => ({
+export const addNewBookmark = (bookmarkedVideoObj: BookmarkedVideo) => ({
     type: 'BOOKMARK_VIDEO',
-    payload: videoUrl
+    payload: bookmarkedVideoObj
 })
