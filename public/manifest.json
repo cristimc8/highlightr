@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "version": "0.0.1",
-  "short_name": "Moments",
-  "name": "Create React App Sample",
+  "short_name": "Highlightr",
+  "name": "Highlightr",
   "description": "Sample application showing how to create an extension with Create React App",
   "action": {
     "default_title": "CRE",
