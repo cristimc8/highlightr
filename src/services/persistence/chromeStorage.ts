@@ -7,8 +7,7 @@ import {keys} from "./keys";
  */
 export const syncBookmark = async (bookmarked: BookmarkedVideo): Promise<void> => {
     let alreadyBookmarked = await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
-    if(alreadyBookmarked === undefined) alreadyBookmarked = [];
-    await setValueForKey(keys.syncd.bookmarkedVideos, [...alreadyBookmarked, bookmarked])
+    await setValueForKey(keys.syncd.bookmarkedVideos, [...(alreadyBookmarked) || [], bookmarked])
 }
 
 export const getSyncdBookmarks = async (): Promise<BookmarkedVideo[]> => {
