@@ -4,7 +4,9 @@ import {ports} from "../constants/ports";
 import {render} from "react-dom";
 import {Provider} from "react-redux";
 import {BookmarkButton} from "../contentScript/components/BookmarkButton";
-import React from "react";
+import React, {useState} from "react";
+import {BurgerMenu} from "../contentScript/components/BurgerMenu";
+import {ContentApp} from "../contentScript/components/ContentApp";
 
 export const setupClient = async ({clientApp} : {clientApp: IHighlightrClient}) => {
     console.log(`Highlightr ${clientApp.version.name}`)
@@ -25,7 +27,7 @@ const injectBookmarkButton = () => {
 
     render(
         <Provider store={proxyStore}>
-            <BookmarkButton/>
+            <ContentApp />
             </Provider>
         , document.getElementById('highlightr-anchor'))
 }

@@ -5,6 +5,10 @@ import {useSelector} from "react-redux";
 import {Main} from "./popup/components/Main";
 import {selectBookmarkedVideos} from "./redux/selectors/bookmarkVideoSelectors";
 
+/**
+ * Popup react page
+ * @constructor
+ */
 function App() {
 
     const videos = useSelector(selectBookmarkedVideos)
