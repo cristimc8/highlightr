@@ -8,9 +8,12 @@ import React, {useState} from "react";
 import {BurgerMenu} from "../contentScript/components/BurgerMenu";
 import {ContentApp} from "../contentScript/components/ContentApp";
 
-export const setupClient = async ({clientApp} : {clientApp: IHighlightrClient}) => {
+export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient }) => {
     console.log(`Highlightr ${clientApp.version.name}`)
-    injectBookmarkButton()
+
+    setTimeout(() => {
+        injectBookmarkButton()
+    }, 5000);
 }
 
 // Create an anchor and inject the button wrapped by the
@@ -19,7 +22,9 @@ const injectBookmarkButton = () => {
     const anchor = document.createElement('div');
     anchor.id = 'highlightr-anchor';
 
-    document.body.insertBefore(anchor, document.body.childNodes[0]);
+    const topLevelButtons = document.getElementById("top-level-buttons-computed");
+    if (topLevelButtons)
+        topLevelButtons.insertBefore(anchor, topLevelButtons.firstChild);
 
     const proxyStore = new Store({
         portName: ports.main
@@ -27,7 +32,7 @@ const injectBookmarkButton = () => {
 
     render(
         <Provider store={proxyStore}>
-            <ContentApp />
-            </Provider>
+            <ContentApp/>
+        </Provider>
         , document.getElementById('highlightr-anchor'))
 }
