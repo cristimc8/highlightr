@@ -18,10 +18,14 @@
       "run_at": "document_end"
     }
   ],
+  "web_accessible_resources": [{
+    "matches": ["*://*.youtube.com/*"],
+    "resources": ["img/highlightrLetter.png"]
+  }],
   "icons": {
-    "16": "img/icon-16.png",
-    "48": "img/icon-48.png",
-    "128": "img/icon-128.png"
+    "16": "img/highlightrLogo.cleaned.png",
+    "48": "img/highlightrLogo.cleaned.png",
+    "128": "img/highlightrLogo.cleaned.png"
   },
   "options_page": "options.html",
   "permissions": ["activeTab", "storage"],
