@@ -22,7 +22,7 @@ export const BookmarkButton = ({setBurgerVisible}: { setBurgerVisible: Function 
     }
 
     return (
-        <img src={chrome.runtime.getURL("img/highlightrLetter.png")}
+        <img id={"highlightr-drawer-trigger"} src={chrome.runtime.getURL("img/highlightrLetter.png")}
              alt="" onClick={bookmarkVideo} width={16} height={20} style={{cursor: 'pointer'}}/>
     )
 }

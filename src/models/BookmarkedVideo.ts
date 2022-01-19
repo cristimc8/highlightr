@@ -16,7 +16,7 @@ export class BookmarkedVideo {
     }
 
     /**
-     * Returns the url where we can find the 120x90 thumbnail
+     * Returns the url where we can find the 320x180 thumbnail
      * @private
      */
     private getVideoThumbnailUrl() {

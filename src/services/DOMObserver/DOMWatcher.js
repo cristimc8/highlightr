@@ -2,6 +2,7 @@ const observeDOM = (function () {
     // @ts-ignore
     let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
+
     return function (obj, callback) {
         if (!obj || obj.nodeType !== 1) return;
 
@@ -25,10 +26,9 @@ const observeDOM = (function () {
  * Function that checks for changes in the DOM
  */
 export const watchForLikeButtonsSpawn = (callbackFn) => {
-    let foundButtons = 0;
     // if already spawned don't watch
-    if(document.getElementsByClassName("ytd-toggle-button-renderer").length >= 2)
-        return callbackFn();
+    if (readyToInject())
+        callbackFn();
     observeDOM(document.body, function (m) {
         let addedNodes = [];
 
@@ -36,13 +36,22 @@ export const watchForLikeButtonsSpawn = (callbackFn) => {
 
         addedNodes.forEach(node => {
             if (node.nodeName === "YT-ICON" && node.classList.length === 2
-            && node.classList.contains("ytd-toggle-button-renderer")) {
+                && node.classList.contains("ytd-toggle-button-renderer")) {
                 // All grandchildren of the node.
-                console.log("Like and dislike buttons spawned!")
-                foundButtons++;
-                if(foundButtons === 2)
-                callbackFn();
+                console.log("Like or dislike buttons spawned!");
+                if (readyToInject()) {
+                    callbackFn();
+                }
             }
         })
     });
+}
+
+const buttonsAlreadySpawned = () => {
+    return document.getElementsByClassName("ytd-toggle-button-renderer").length >= 2
+}
+
+export const readyToInject = () => {
+    return document.getElementById("top-level-buttons-computed") && buttonsAlreadySpawned() &&
+        document.getElementById("highlightr-anchor") === null
 }
