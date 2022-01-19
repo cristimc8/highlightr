@@ -2,11 +2,13 @@ export class BookmarkedVideo {
     private readonly _url: string;
     private readonly _secondsPassed: number;
     private readonly _title: string;
+    private readonly _timestamp: Date;
 
     constructor(url: string, title: string, secondsPassed: number) {
         this._secondsPassed = secondsPassed;
         this._url = url;
         this._title = title;
+        this._timestamp = new Date();
     }
 
     /**

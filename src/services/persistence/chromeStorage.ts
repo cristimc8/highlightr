@@ -1,5 +1,18 @@
-export const persist = async () => {
+import {BookmarkedVideo} from "../../models/BookmarkedVideo";
+import {keys} from "./keys";
 
+/**
+ * Updates the bookmarked values by adding this one.
+ * @param bookmarked
+ */
+export const syncBookmark = async (bookmarked: BookmarkedVideo): Promise<void> => {
+    let alreadyBookmarked = await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
+    if(alreadyBookmarked === undefined) alreadyBookmarked = [];
+    await setValueForKey(keys.syncd.bookmarkedVideos, [...alreadyBookmarked, bookmarked])
+}
+
+export const getSyncdBookmarks = async (): Promise<BookmarkedVideo[]> => {
+    return await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
 }
 
 /**
@@ -9,7 +22,7 @@ export const persist = async () => {
  * @returns {Promise<JSON | String>}
  */
 function getValueForKey(key: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject): any => {
         try {
             chrome.storage.sync.get([key], function (result) {
                 resolve(result[key]);
@@ -42,10 +55,10 @@ function removeKeyEntry(key: string) {
 /**
  * Function that sets a value for a key provided in the chrome local storage.
  * @param key
- * @param value JSON format
+ * @param value anything, object to json
  * @returns {Promise<Boolean>} State of the operation, true for success
  */
-function setValueForKey(key: string, value: string) {
+function setValueForKey(key: string, value: any) {
     return new Promise((resolve, reject) => {
         try {
             chrome.storage.sync.set({[key]: value}, function () {

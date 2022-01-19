@@ -3,6 +3,9 @@
 import {wrapStore} from "webext-redux";
 import {store} from "../redux/store";
 import {ports} from "../constants/ports";
+import {preloadBookmarks} from "../redux/actions/bookmarkVideoActions";
+import {getSyncdBookmarks} from "../services/persistence/chromeStorage";
+import {BookmarkedVideo} from "../models/BookmarkedVideo";
 
 runBackgroundScripts()
 
@@ -12,5 +15,8 @@ export function runBackgroundScripts() {
         portName: ports.main
     })
 
-
+    getSyncdBookmarks().then((preloadedBookmarkedVideos: BookmarkedVideo[]) => {
+        if(preloadedBookmarkedVideos === undefined) return
+        store.dispatch(preloadBookmarks(preloadedBookmarkedVideos))
+    })
 }
