@@ -4,7 +4,7 @@ import {BurgerMenu} from "./BurgerMenu";
 
 /**
  * Injected in the youtube page with access to html
- * @constructor
+ * so you can use shit like document.getElementById
  */
 export const ContentApp = () => {
 

@@ -11,4 +11,6 @@ export function runBackgroundScripts() {
     wrapStore(store, {
         portName: ports.main
     })
+
+
 }
