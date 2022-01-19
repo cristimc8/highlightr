@@ -16,10 +16,6 @@ export const BookmarkButton = ({setBurgerVisible}: { setBurgerVisible: Function 
         return document.title.split(" - YouTube")[0];
     }
 
-    useEffect(() => {
-        console.log("3 secunde");
-    }, []);
-
     const bookmarkVideo = () => {
         dispatch(addNewBookmark(new BookmarkedVideo(document.URL, getVideoTitle(), getVideoCurrentTime())))
         setBurgerVisible(true)

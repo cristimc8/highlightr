@@ -7,13 +7,14 @@ import {BookmarkButton} from "../contentScript/components/BookmarkButton";
 import React, {useState} from "react";
 import {BurgerMenu} from "../contentScript/components/BurgerMenu";
 import {ContentApp} from "../contentScript/components/ContentApp";
+import {watchForLikeButtonsSpawn} from "../services/DOMObserver/DOMWatcher";
 
 export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient }) => {
     console.log(`Highlightr ${clientApp.version.name}`)
 
-    setTimeout(() => {
+    watchForLikeButtonsSpawn(() => {
         injectBookmarkButton()
-    }, 3000);
+    })
 }
 
 // Create an anchor and inject the button wrapped by thes
