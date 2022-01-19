@@ -25,7 +25,7 @@ export const BookmarkButton = ({setBurgerVisible}) => {
     }
 
     return (
-        <button>
+        <button onClick={bookmarkVideo}>
             sint urat si cu pl mare
         </button>
     )
