@@ -3,15 +3,16 @@ import {useDispatch} from "react-redux";
 import {addNewBookmark} from "../../redux/actions/bookmarkVideoActions";
 import {BookmarkedVideo} from "../../models/BookmarkedVideo";
 
-export const BookmarkButton = ({setBurgerVisible}) => {
+export const BookmarkButton = ({setBurgerVisible}: { setBurgerVisible: Function }) => {
     const dispatch = useDispatch();
 
-    const getVideoCurrentTime = () => {
+    const getVideoCurrentTime = (): number => {
         const video = document.getElementsByClassName('video-stream')[0];
+        // @ts-ignore
         return video.currentTime;
     }
 
-    const getVideoTitle = () => {
+    const getVideoTitle = (): string => {
         return document.title.split(" - YouTube")[0];
     }
 
@@ -25,8 +26,7 @@ export const BookmarkButton = ({setBurgerVisible}) => {
     }
 
     return (
-        <button onClick={bookmarkVideo}>
-            sint urat si cu pl mare
-        </button>
+        <img src={chrome.runtime.getURL("img/highlightrLetter.png")}
+             alt="" onClick={bookmarkVideo} width={16} height={20} style={{cursor: 'pointer'}}/>
     )
 }

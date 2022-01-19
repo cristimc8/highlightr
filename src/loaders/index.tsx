@@ -13,13 +13,17 @@ export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient })
 
     setTimeout(() => {
         injectBookmarkButton()
-    }, 5000);
+    }, 3000);
 }
 
-// Create an anchor and inject the button wrapped by the
+// Create an anchor and inject the button wrapped by thes
 // redux provider
 const injectBookmarkButton = () => {
     const anchor = document.createElement('div');
+    anchor.style.display = "flex"
+    anchor.style.alignItems = "center"
+    anchor.style.paddingBottom = "2px"
+    anchor.style.paddingRight = "12px"
     anchor.id = 'highlightr-anchor';
 
     const topLevelButtons = document.getElementById("top-level-buttons-computed");
