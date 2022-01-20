@@ -32,6 +32,28 @@ export class BookmarkedVideo {
     }
 
     /**
+     * Gets the datetime when the bookmark was created
+     */
+    get timestamp(): Date {
+        return this._timestamp;
+    }
+
+    /**
+     * Gets the url where we can find the video thumbnail
+     * 320x180
+     */
+    get thumbnailUrl(): string {
+        return this._thumbnailUrl;
+    }
+
+    /**
+     * Gets the video id
+     */
+    get videoId(): string {
+        return this._videoId;
+    }
+
+    /**
      * Gets the original video url with no appended (by us!) time
      */
     get url(): string {
