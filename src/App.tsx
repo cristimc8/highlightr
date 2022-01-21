@@ -4,6 +4,7 @@ import './App.css';
 import {useSelector} from "react-redux";
 import {Main} from "./popup/components/Main";
 import {selectBookmarkedVideos} from "./redux/selectors/bookmarkVideoSelectors";
+import {BookmarkedVideoLayout} from "./popup/components/BookmarkedVideoLayout/BookmarkedVideoLayout";
 
 /**
  * Popup react page
@@ -17,7 +18,10 @@ function App() {
 
     return (
         <div className="App">
-            <Main/>
+            <BookmarkedVideoLayout bookmarkedVideo={null} />
+            <BookmarkedVideoLayout bookmarkedVideo={null} />
+            <BookmarkedVideoLayout bookmarkedVideo={null} />
+            <BookmarkedVideoLayout bookmarkedVideo={null} />
         </div>
     );
 }
