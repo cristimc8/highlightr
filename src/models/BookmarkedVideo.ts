@@ -1,11 +1,4 @@
 export class BookmarkedVideo {
-    get bookmarkTitle(): string {
-        return this._bookmarkTitle;
-    }
-
-    set bookmarkTitle(value: string) {
-        this._bookmarkTitle = value;
-    }
     private readonly _url: string;
     private readonly _secondsPassed: number;
     private readonly _title: string;
@@ -53,6 +46,14 @@ export class BookmarkedVideo {
      */
     get thumbnailUrl(): string {
         return this._thumbnailUrl;
+    }
+
+    get bookmarkTitle(): string {
+        return this._bookmarkTitle;
+    }
+
+    set bookmarkTitle(value: string) {
+        this._bookmarkTitle = value;
     }
 
     /**
