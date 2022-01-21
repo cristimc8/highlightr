@@ -6,31 +6,13 @@ export const BookmarkedVideoLayout = ({bookmarkedVideo}: {
 }) => {
 
     return (
-        <div style={styles.bookmarkedVideo} className={"gradient"}>
-            <div style={styles.videoThumbnailContainer}>
-                {/* @ts-ignore */}
-                <img src={bookmarkedVideo.thumbnailUrl} style={styles.videoThumbnail} alt="Thumbnail"/>
+        <a href={bookmarkedVideo.videoUrlAtSavedTime} target={"_blank"} className={"thumbnailAnchor"}>
+            <div className={"bookmarkedVideo"}>
+                <img src={bookmarkedVideo.thumbnailUrl} className={"videoThumbnail"} alt="Thumbnail"/>
+                <div className={"titleContainer"}>
+                    <span style={{color: "black", fontWeight: 600}} className={"lato"}>{bookmarkedVideo.title}</span>
+                </div>
             </div>
-        </div>
+        </a>
     )
-}
-
-const styles = {
-    bookmarkedVideo: {
-        width: "200px",
-        height: "210px",
-        borderRadius: "15px",
-        backgroundColor: "#ededed"
-    },
-    videoThumbnail: {
-        objectFit: "cover",
-        width: "100%"
-    },
-    videoThumbnailContainer: {
-        height: "150px",
-        width: "100%",
-        borderTopLeftRadius: "15px",
-        borderTopRightRadius: "15px",
-        overflow: "hidden"
-    }
 }
