@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 
 import {useSelector} from "react-redux";
 import {Main} from "./popup/components/Main";
 import {selectBookmarkedVideos} from "./redux/selectors/bookmarkVideoSelectors";
 import {BookmarkedVideoLayout} from "./popup/components/BookmarkedVideoLayout/BookmarkedVideoLayout";
+import {BookmarkedVideo} from "./models/BookmarkedVideo";
+import {Header} from "./popup/components/header/Header";
 
 /**
  * Popup react page
@@ -18,10 +20,14 @@ function App() {
 
     return (
         <div className="App">
-            <BookmarkedVideoLayout bookmarkedVideo={null} />
-            <BookmarkedVideoLayout bookmarkedVideo={null} />
-            <BookmarkedVideoLayout bookmarkedVideo={null} />
-            <BookmarkedVideoLayout bookmarkedVideo={null} />
+            <Header />
+            <hr/>
+
+            {videos && videos.map((bv: BookmarkedVideo, i) => {
+                return (
+                    <BookmarkedVideoLayout key={i} bookmarkedVideo={bv}/>
+                )
+            })}
         </div>
     );
 }

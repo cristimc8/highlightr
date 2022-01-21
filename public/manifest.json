@@ -21,7 +21,7 @@
   ],
   "web_accessible_resources": [{
     "matches": ["*://*.youtube.com/*"],
-    "resources": ["img/highlightrLetter.png"]
+    "resources": ["img/highlightrLetter.png", "img/48/highlightrLogo.cleaned.png"]
   }],
   "icons": {
     "16": "img/16/highlightrLogo.cleaned.png",
