@@ -1,10 +1,18 @@
 export class BookmarkedVideo {
+    get bookmarkTitle(): string {
+        return this._bookmarkTitle;
+    }
+
+    set bookmarkTitle(value: string) {
+        this._bookmarkTitle = value;
+    }
     private readonly _url: string;
     private readonly _secondsPassed: number;
     private readonly _title: string;
     private readonly _timestamp: Date;
     private readonly _thumbnailUrl: string;
     private readonly _videoId: string;
+    private _bookmarkTitle: string;
 
     constructor(url: string, title: string, secondsPassed: number) {
         this._secondsPassed = secondsPassed;
@@ -13,6 +21,7 @@ export class BookmarkedVideo {
         this._timestamp = new Date();
         this._videoId = this.getVideoId()
         this._thumbnailUrl = this.getVideoThumbnailUrl()
+        this._bookmarkTitle = ""
     }
 
     /**
