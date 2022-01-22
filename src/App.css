@@ -1,40 +1,70 @@
 .App {
-  text-align: center;
+    text-align: center;
+    width: 400px;
+    padding: 0 10px 10px;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
+}
+
+.gradient {
+    background: linear-gradient(
+            186deg, rgb(0, 0, 0) 4%, rgb(0, 0, 0) 7%, rgb(3, 1, 43) 88%, rgb(4, 2, 53) 100%) no-repeat fixed;;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.lato {
+    font-family: 'Lato', sans-serif;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 150px;
-  min-width: 150px;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    padding: 12px 10px 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
+}
+
+.videoThumbnail {
+    width: 140px;
+    height: 80px;
+    border-radius: 15px;
+}
+
+.bookmarkedVideo {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.titleContainer {
+    display: flex;
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+}
+
+.thumbnailAnchor {
+    text-decoration: none;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
