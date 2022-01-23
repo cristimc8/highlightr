@@ -1,26 +1,27 @@
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
+import {Text} from "@chakra-ui/react";
 import {selectBookmarkedVideos} from "../../redux/selectors/bookmarkVideoSelectors";
 import {Header} from "../../popup/components/header/Header";
-
-const _width    = "350px";
-const _padding  = "20px";
+import TimestampBox from "./TimestampBox";
+import "./burger-menu.css"
 
 export const BurgerMenu = () => {
     const videos = useSelector(selectBookmarkedVideos)
 
     useEffect(() => {
-        console.log(videos);
+        console.log("videos: ", videos);
     }, [videos])
 
     return (
-        <div style={{position: "fixed", right: 0,
-            height: '100vh', backgroundColor: 'white', width: _width, zIndex: 999999999, padding: _padding
-        }}>
-            <div style={{marginLeft: "20px"}}>
-                <Header/>
+        <div className={"burger-menu"}>
+            <div className={"header-container"}>
+                <Header style={{marginLeft: "20px"}}/>
             </div>
-            <hr />
+            <div className={"content"}>
+                <Text fontSize={"20px"}>There are <b>{videos?.length}</b> timestamps...</Text>
+                {videos?.map(video => <TimestampBox video={video}/>)}
+            </div>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React from "react";
 import {useDispatch} from "react-redux";
 import {addNewBookmark} from "../../redux/actions/bookmarkVideoActions";
 import {BookmarkedVideo} from "../../models/BookmarkedVideo";
