@@ -3,9 +3,10 @@ import {Store} from "webext-redux";
 import {ports} from "../constants/ports";
 import {render} from "react-dom";
 import {Provider} from "react-redux";
-import React, {useState} from "react";
-import {ContentApp} from "../contentScript/components/ContentApp";
-import {readyToInject } from "../services/DOMObserver/DOMWatcher";
+import React from "react";
+import {readyToInject} from "../services/DOMObserver/DOMWatcher";
+import {BurgerMenu} from "../contentScript/components/BurgerMenu";
+import {BookmarkButton} from "../contentScript/components/BookmarkButton";
 
 export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient }) => {
     console.log(`Highlightr ${clientApp.version.name}`)
@@ -16,32 +17,59 @@ export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient })
 }
 
 const injectWithChecking = () => {
-    if(readyToInject())
+    if (readyToInject())
         injectBookmarkButton()
 }
 
-// Create an anchor and inject the button wrapped by thes
+// Create an anchor and inject the button wrapped by these
 // redux provider
 const injectBookmarkButton = () => {
-    console.log("Creating bookmark button")
-    const anchor = document.createElement('div');
-    anchor.style.display = "flex"
-    anchor.style.alignItems = "center"
-    anchor.style.paddingBottom = "2px"
-    anchor.style.paddingRight = "12px"
-    anchor.id = 'highlightr-anchor';
-
-    const topLevelButtons = document.getElementById("top-level-buttons-computed");
-    if (topLevelButtons)
-        topLevelButtons.insertBefore(anchor, topLevelButtons.firstChild);
-
+    let disableContentClickListener = false;
     const proxyStore = new Store({
         portName: ports.main
     })
 
+    // creating elements
+    const hightlighrBurgr = document.createElement('div');
+    hightlighrBurgr.id = 'hightlighr-burgr'
+    hightlighrBurgr.style.display = "none";
+
+    const highlightrButton = document.createElement('div');
+    highlightrButton.style.display = "flex"
+    highlightrButton.style.alignItems = "center"
+    highlightrButton.style.paddingBottom = "2px"
+    highlightrButton.style.paddingRight = "12px"
+    highlightrButton.id = 'highlightr-button';
+    highlightrButton.onclick = function () {
+        if (hightlighrBurgr.style.display === "none")
+            hightlighrBurgr.style.display = "block";
+        disableContentClickListener = true;
+    } // open burger menu
+
+    // inserting elements in DOM
+    const topLevelButtons = document.getElementById("top-level-buttons-computed");
+    topLevelButtons?.insertBefore(highlightrButton, topLevelButtons.firstChild);
+
+    document.body.insertBefore(hightlighrBurgr, document.body.firstChild);
+
+    // rendering inside elements
     render(
         <Provider store={proxyStore}>
-            <ContentApp/>
+            <BookmarkButton/>
         </Provider>
-        , document.getElementById('highlightr-anchor'))
+        , document.getElementById('highlightr-button'))
+    render(
+        <Provider store={proxyStore}>
+            <BurgerMenu/>
+        </Provider>
+        , document.getElementById("hightlighr-burgr"))
+
+    const contentClicked = () => {
+        // close burger menu
+        if (hightlighrBurgr.style.display === "block" && !disableContentClickListener)
+            hightlighrBurgr.style.display = "none";
+        disableContentClickListener = false;
+    }
+    const content = document.getElementById("content");
+    content?.addEventListener("click", contentClicked);
 }

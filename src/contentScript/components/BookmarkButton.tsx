@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {addNewBookmark} from "../../redux/actions/bookmarkVideoActions";
 import {BookmarkedVideo} from "../../models/BookmarkedVideo";
 
-export const BookmarkButton = ({setBurgerVisible}: { setBurgerVisible: Function }) => {
+export const BookmarkButton = () => {
     const dispatch = useDispatch();
 
     const getVideoCurrentTime = (): number => {
@@ -18,7 +18,6 @@ export const BookmarkButton = ({setBurgerVisible}: { setBurgerVisible: Function 
 
     const bookmarkVideo = () => {
         dispatch(addNewBookmark(new BookmarkedVideo(document.URL, getVideoTitle(), getVideoCurrentTime())))
-        setBurgerVisible(true)
     }
 
     return (

@@ -53,5 +53,5 @@ const buttonsAlreadySpawned = () => {
 
 export const readyToInject = () => {
     return document.getElementById("top-level-buttons-computed") && buttonsAlreadySpawned() &&
-        document.getElementById("highlightr-anchor") === null
+        document.getElementById("highlightr-button") === null
 }

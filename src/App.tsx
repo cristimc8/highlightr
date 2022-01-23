@@ -22,7 +22,6 @@ function App() {
         <div className="App">
             <Header />
             <hr/>
-
             {videos && videos.map((bv: BookmarkedVideo, i) => {
                 return (
                     <BookmarkedVideoLayout key={i} bookmarkedVideo={bv}/>
