@@ -24,6 +24,7 @@ const injectWithChecking = () => {
 // Create an anchor and inject the button wrapped by these
 // redux provider
 const injectBookmarkButton = () => {
+    const content = document.getElementById("content");
     let disableContentClickListener = false;
     const proxyStore = new Store({
         portName: ports.main
@@ -41,8 +42,11 @@ const injectBookmarkButton = () => {
     highlightrButton.style.paddingRight = "12px"
     highlightrButton.id = 'highlightr-button';
     highlightrButton.onclick = function () {
-        if (hightlighrBurgr.style.display === "none")
+        if (hightlighrBurgr.style.display === "none") {
             hightlighrBurgr.style.display = "block";
+            // @ts-ignore
+            content.style.opacity = "0.2";
+        }
         disableContentClickListener = true;
     } // open burger menu
 
@@ -66,10 +70,12 @@ const injectBookmarkButton = () => {
 
     const contentClicked = () => {
         // close burger menu
-        if (hightlighrBurgr.style.display === "block" && !disableContentClickListener)
+        if (hightlighrBurgr.style.display === "block" && !disableContentClickListener) {
             hightlighrBurgr.style.display = "none";
+            // @ts-ignore
+            content.style.opacity = "1";
+        }
         disableContentClickListener = false;
     }
-    const content = document.getElementById("content");
     content?.addEventListener("click", contentClicked);
 }
