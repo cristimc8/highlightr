@@ -32,6 +32,7 @@ export class BookmarkedVideo {
      * @private
      */
     private getVideoId(): string {
-        return this.url.split("&t")[0].split("?v=")[1];
+        const urlObj = new URL(this.url);
+        return urlObj.searchParams.get("v") || "dQw4w9WgXcQ";
     }
 }
