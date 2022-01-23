@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './App.css';
 
 import {useSelector} from "react-redux";
-import {Main} from "./popup/components/Main";
 import {selectBookmarkedVideos} from "./redux/selectors/bookmarkVideoSelectors";
 import {BookmarkedVideoLayout} from "./popup/components/BookmarkedVideoLayout/BookmarkedVideoLayout";
 import {BookmarkedVideo} from "./models/BookmarkedVideo";

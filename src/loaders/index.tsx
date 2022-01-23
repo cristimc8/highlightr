@@ -7,6 +7,7 @@ import React from "react";
 import {readyToInject} from "../services/DOMObserver/DOMWatcher";
 import {BurgerMenu} from "../contentScript/components/BurgerMenu";
 import {BookmarkButton} from "../contentScript/components/BookmarkButton";
+import {ChakraProvider} from "@chakra-ui/react";
 
 export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient }) => {
     console.log(`Highlightr ${clientApp.version.name}`)
@@ -64,7 +65,9 @@ const injectBookmarkButton = () => {
         , document.getElementById('highlightr-button'))
     render(
         <Provider store={proxyStore}>
-            <BurgerMenu/>
+            <ChakraProvider>
+                <BurgerMenu/>
+            </ChakraProvider>
         </Provider>
         , document.getElementById("hightlighr-burgr"))
 
