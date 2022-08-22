@@ -1,5 +1,4 @@
 import {BookmarkedVideo} from "../../models/BookmarkedVideo";
-import {getSyncdBookmarks} from "../../services/persistence/chromeStorage";
 
 /**
  * Action for adding a new bookmark based on a url

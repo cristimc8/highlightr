@@ -1,84 +1,68 @@
-import {IHighlightrClient} from "../types/IHighlightrClient";
-import {Store} from "webext-redux";
-import {ports} from "../constants/ports";
-import {render} from "react-dom";
-import {Provider} from "react-redux";
+import { IHighlightrClient } from "../types/IHighlightrClient";
 import React from "react";
-import {readyToInject} from "../services/DOMObserver/DOMWatcher";
-import {BurgerMenu} from "../contentScript/components/BurgerMenu";
-import {BookmarkButton} from "../contentScript/components/BookmarkButton";
-import {ChakraProvider} from "@chakra-ui/react";
+import { readyToInject } from "../services/DOMObserver/DOMWatcher";
+import { HighlightrBurgrComponent } from "../contentScript/components/webcomponents/HighlightrBurgr";
+import { BookmarkButtonComponent } from "../contentScript/components/webcomponents/BookmarkButton";
+import { extractElementFromShadow } from "../services/utils/utils";
 
-export const setupClient = async ({clientApp}: { clientApp: IHighlightrClient }) => {
-    console.log(`Highlightr ${clientApp.version.name}`)
+let injected = false;
 
-    setInterval(() => {
-        injectWithChecking()
-    }, 500)
-}
+export const setupClient = async ({ clientApp }: { clientApp: IHighlightrClient }) => {
+  console.log(`Highlightr ${clientApp.version.name}`);
+
+  setInterval(() => {
+    injectWithChecking();
+  }, 500);
+};
 
 const injectWithChecking = () => {
-    if (readyToInject())
-        injectBookmarkButton()
-}
+  if (readyToInject() && !injected)
+    injectBookmarkButton();
+};
 
 // Create an anchor and inject the button wrapped by these
 // redux provider
 const injectBookmarkButton = () => {
-    const content = document.getElementById("content");
-    let disableContentClickListener = false;
-    const proxyStore = new Store({
-        portName: ports.main
-    })
+  injected = true;
+  const content = document.getElementById("content");
+  let disableContentClickListener = false;
 
-    // creating elements
-    const hightlighrBurgr = document.createElement('div');
-    hightlighrBurgr.id = 'hightlighr-burgr'
-    hightlighrBurgr.style.display = "none";
+  // creating elements
+  customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
+  customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
 
-    const highlightrButton = document.createElement('div');
-    highlightrButton.style.display = "flex"
-    highlightrButton.style.alignItems = "center"
-    highlightrButton.style.paddingBottom = "2px"
-    highlightrButton.style.paddingRight = "12px"
-    highlightrButton.id = 'highlightr-button';
-    highlightrButton.onclick = function () {
-        if (hightlighrBurgr.style.display === "none") {
-            hightlighrBurgr.style.display = "block";
-            // @ts-ignore
-            content.style.opacity = "0.2";
-        }
-        disableContentClickListener = true;
-    } // open burger menu
+  const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
+  const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
 
-    // inserting elements in DOM
-    const topLevelButtons = document.getElementById("top-level-buttons-computed");
-    topLevelButtons?.insertBefore(highlightrButton, topLevelButtons.firstChild);
+  // inserting elements in DOM
+  document.body.insertBefore(hightlighrBurgrShadow, document.body.firstChild);
 
-    document.body.insertBefore(hightlighrBurgr, document.body.firstChild);
+  const topLevelButtons = document.getElementById("top-level-buttons-computed");
+  topLevelButtons?.insertBefore(highlightrButtonShadow, topLevelButtons.firstChild);
 
-    // rendering inside elements
-    render(
-        <Provider store={proxyStore}>
-            <BookmarkButton/>
-        </Provider>
-        , document.getElementById('highlightr-button'))
-    render(
-        <Provider store={proxyStore}>
-            <ChakraProvider>
-                <BurgerMenu/>
-            </ChakraProvider>
-        </Provider>
-        , document.getElementById("hightlighr-burgr"))
-
-    const contentClicked = () => {
-        // close burger menu
-        if (hightlighrBurgr.style.display === "block" && !disableContentClickListener) {
-            hightlighrBurgr.style.display = "none";
-            // @ts-ignore
-            content.style.opacity = "1";
-        }
-        disableContentClickListener = false;
+  const highlightrButton = extractElementFromShadow('highlightr-bookmark-button', 'highlightr-button-container');
+  const highlightrBurgr = extractElementFromShadow('highlightr-burgr', 'highlightr-burgr');
+  highlightrButton.onclick = () => {
+    if (highlightrBurgr.style.display === "none") {
+      highlightrBurgr.style.display = "block";
+      if (content) {
+        content.style.opacity = "0.2";
+      }
     }
-    content?.addEventListener("click", contentClicked);
-}
+    disableContentClickListener = true;
+  };
+
+  console.log(highlightrButtonShadow)
+  console.log(hightlighrBurgrShadow)
+
+  const contentClicked = () => {
+    // close burger menu
+    if (highlightrBurgr.style.display === "block" && !disableContentClickListener) {
+      highlightrBurgr.style.display = "none";
+      // @ts-ignore
+      content.style.opacity = "1";
+    }
+    disableContentClickListener = false;
+  };
+  content?.addEventListener("click", contentClicked);
+};

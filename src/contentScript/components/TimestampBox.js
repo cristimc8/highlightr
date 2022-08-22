@@ -1,6 +1,5 @@
-import {Box, Flex, IconButton, Image, Progress, Text} from "@chakra-ui/react";
 import { FaTrashAlt } from 'react-icons/fa';
-import {secondsToVideoTimestamp} from "../../services/utils/Utils";
+import { secondsToVideoTimestamp } from "../../services/utils/utils";
 
 const BoxStyles = {
     boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
@@ -22,41 +21,46 @@ const BoxStyles = {
 // }
 
 const TimestampBox = ({video, ...props}) => {
-    console.log("extra props: ", props);
-
     return (
-        <Box style={BoxStyles}>
-            <Flex style={{
+        <div style={BoxStyles}>
+            <div style={{
+                display: "flex",
                 padding: "25px 20px",
                 flexWrap: "nowrap",
                 justifyContent: "space-between",
                 alignItems: "center"
             }}>
-                <Flex style={{
+                <div style={{
+                    display: "flex",
                     justifyContent: "flex-start",
                     alignItems: "flex-start",
                     flexDirection: "column",
                     flexGrow: "1",
                 }}>
-                    <Image style={{maxWidth: "100px"}}
-                           src={video.thumbnailUrl}/>
-                </Flex>
-                <Flex style={{
+                    <img style={{maxWidth: "100px"}}
+                         src={video.thumbnailUrl}/>
+                </div>
+                <div style={{
+                    display: "flex",
                     justifyContent: "flex-start",
                     alignItems: "flex-start",
                     flexDirection: "column",
                     flexGrow: "2",
                     margin: "5px 10px"
                 }}>
-                    <Text fontSize={"14px"} fontWeight={"bold"}>{video.title}</Text>
-                    {/*{video.bookmarkTitle}*/}
-                    <Text fontSize={"12px"}>this is the bookmarked title</Text>
-                    <Text style={{width: "100%", fontSize: "12px"}}>{secondsToVideoTimestamp(video?.secondsPassed)}</Text>
-                    <Progress width={"100%"} value={video?.secondsPassed / 335 * 100} size='xs' colorScheme='red' />
-                </Flex>
-                <IconButton colorScheme='red' aria-label='Search database' icon={<FaTrashAlt />} />
-            </Flex>
-        </Box>
+                    <span style={{
+                        fontSize: '14px',
+                        fontWeight: 'bold'
+                    }}>{video.title}</span>
+                    {video.bookmarkTitle}
+                    <span style={{fontSize: '12px'}}>this is the bookmarked title</span>
+                    <span
+                        style={{width: "100%", fontSize: "12px"}}>{secondsToVideoTimestamp(video?.secondsPassed)}</span>
+                    <progress style={{width: '100%'}} value={video?.secondsPassed / 335 * 100}/>
+                </div>
+                <FaTrashAlt/>
+            </div>
+        </div>
     )
 }
 
