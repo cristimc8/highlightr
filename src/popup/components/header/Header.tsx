@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import '../../../App.css';
 
-// @ts-ignore
-export const Header = (props) => {
+export const Header = () => {
+  const [text, setText] = useState('');
     return (
-        <div className={"App-header"} style={props.style ? props.style : {}}>
-            <img src={chrome.runtime.getURL("img/48/highlightrLogo.cleaned.png")}
-                 style={{height: "20px", width: "20px", marginRight: "5px"}}
-                 alt=""/>
-            <span color={"black"} className={"lato"}
-               style={{fontSize: 20, fontWeight: 800, color: "#3e4652",
-            fontStretch: "ultra-expanded"}}>
-                Highlightr
-            </span>
+        <div className={'App-header'}>
+            <div id={'searchBar'}>
+                <input
+                    className={'searchInput'}
+                    type={'text'}
+                    placeholder={'Search'}
+                    value={text}
+                    onChange={(e) => setText(e.target.value)
+                }/>
+              <div id={'searchIcon'}>
+                <img src={chrome.runtime.getURL("img/magnifying-glass.png")}
+                     alt="search"
+                     width={'17px'}
+                     height={'17px'}
+                     style={{
+                       marginRight: '10px',
+                       cursor: 'pointer'
+                }}/>
+              </div>
+            </div>
         </div>
     )
 }

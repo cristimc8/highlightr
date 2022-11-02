@@ -7,6 +7,18 @@ import { keys } from "./keys";
  */
 export const syncBookmark = async (bookmarked: BookmarkedVideo): Promise<void> => {
   let alreadyBookmarked = await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
+  // we need to find if we already have this video id in our bookmarks and update the checkpoints
+  if (alreadyBookmarked) {
+    const foundIndex = alreadyBookmarked.findIndex((video) => video.videoId === bookmarked.videoId);
+    if (foundIndex !== -1) {
+      alreadyBookmarked[foundIndex].checkpoints = [
+        ...alreadyBookmarked[foundIndex].checkpoints,
+        ...bookmarked.checkpoints
+      ];
+      await setValueForKey(keys.syncd.bookmarkedVideos, alreadyBookmarked);
+      return;
+    }
+  }
   await setValueForKey(keys.syncd.bookmarkedVideos, [...(alreadyBookmarked) || [], bookmarked]);
 };
 
@@ -30,6 +42,19 @@ function getValueForKey(key: string) {
       reject(e);
     }
   });
+}
+
+export function clearLocalStorage() {
+  return new Promise(resolve => {
+    chrome.storage.sync.clear(function () {
+      let error = chrome.runtime.lastError;
+      if (error) {
+        console.error(error);
+        resolve(0)
+      }
+      resolve(1)
+    });
+  })
 }
 
 /**
@@ -57,7 +82,7 @@ function removeKeyEntry(key: string) {
  * @param value anything, object to json
  * @returns {Promise<Boolean>} State of the operation, true for success
  */
-function setValueForKey(key: string, value: any) {
+export function setValueForKey(key: string, value: any) {
   return new Promise((resolve, reject) => {
     try {
       chrome.storage.sync.set({ [key]: value }, function () {
