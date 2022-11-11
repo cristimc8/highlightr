@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectBookmarkedVideos } from "../../redux/selectors/bookmarkVideoSelectors";
 import { Header } from "../../popup/components/header/Header";
-import TimestampBox from "./TimestampBox";
 
 export const BurgerMenu = () => {
   const videos = useSelector(selectBookmarkedVideos);

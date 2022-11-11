@@ -35,7 +35,7 @@ export const getSyncdBookmarks = async (): Promise<BookmarkedVideo[]> => {
 function getValueForKey(key: string) {
   return new Promise((resolve, reject): any => {
     try {
-      chrome.storage.sync.get([key], function (result) {
+      chrome.storage.local.get([key], function (result) {
         resolve(result[key]);
       });
     } catch (e) {
@@ -46,7 +46,7 @@ function getValueForKey(key: string) {
 
 export function clearLocalStorage() {
   return new Promise(resolve => {
-    chrome.storage.sync.clear(function () {
+    chrome.storage.local.clear(function () {
       let error = chrome.runtime.lastError;
       if (error) {
         console.error(error);
@@ -67,7 +67,7 @@ export function clearLocalStorage() {
 function removeKeyEntry(key: string) {
   return new Promise((resolve, reject) => {
     try {
-      chrome.storage.sync.remove([key], () => {
+      chrome.storage.local.remove([key], () => {
         resolve(true);
       });
     } catch (e) {
@@ -85,7 +85,7 @@ function removeKeyEntry(key: string) {
 export function setValueForKey(key: string, value: any) {
   return new Promise((resolve, reject) => {
     try {
-      chrome.storage.sync.set({ [key]: value }, function () {
+      chrome.storage.local.set({ [key]: value }, function () {
         resolve(true);
       });
     } catch (e) {
@@ -101,7 +101,7 @@ export function setValueForKey(key: string, value: any) {
  */
 export function getAllStorageEntries() {
   return new Promise(resolve => {
-    chrome.storage.sync.get(function (result) {
+    chrome.storage.local.get(function (result) {
       resolve(result);
     });
   });
