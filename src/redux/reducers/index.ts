@@ -1,6 +1,6 @@
-import {combineReducers} from "redux";
-import {bookmarkVideoReducer} from "./bookmarkVideoReducer";
+import { combineReducers } from "redux";
+import { bookmarkVideoReducer } from "./bookmarkVideoReducer";
 
 export default combineReducers({
-    bookmarkVideoReducer
-})
+  bookmarkVideoReducer
+});

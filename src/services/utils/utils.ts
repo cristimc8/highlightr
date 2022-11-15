@@ -1,9 +1,3 @@
-export const secondsToVideoTimestamp = (seconds: number) => {
-    if (seconds < 3600)
-        return new Date(seconds * 1000).toISOString().substr(14, 5);
-    return new Date(seconds * 1000).toISOString().substr(11, 8);
-}
-
 export const promiseSleep = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const extractElementFromShadow = (shadowName: string, elementId: string): HTMLElement => {

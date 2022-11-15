@@ -1,5 +1,4 @@
 import { FaTrashAlt } from 'react-icons/fa';
-import { secondsToVideoTimestamp } from "../../services/utils/utils";
 
 const BoxStyles = {
     boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
@@ -55,7 +54,7 @@ const TimestampBox = ({video, ...props}) => {
                     {video.bookmarkTitle}
                     <span style={{fontSize: '12px'}}>this is the bookmarked title</span>
                     <span
-                        style={{width: "100%", fontSize: "12px"}}>{secondsToVideoTimestamp(video?.secondsPassed)}</span>
+                        style={{width: "100%", fontSize: "12px"}}>{12}</span>
                     <progress style={{width: '100%'}} value={video?.secondsPassed / 335 * 100}/>
                 </div>
                 <FaTrashAlt/>

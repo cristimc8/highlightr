@@ -15,17 +15,16 @@ function App() {
 
   const videos = useSelector(selectBookmarkedVideos);
 
-  console.log(videos);
-
   return (
       <div className="App">
         <Header/>
-        <hr/>
-        {videos && videos.map((bv: BookmarkedVideo, i) => {
-          return (
-              <BookmarkedVideoLayout key={i} bookmarkedVideo={bv}/>
-          );
-        })}
+        <div className={'bookmarkedVideos'}>
+          {videos && videos.map((bv: BookmarkedVideo, i) => {
+            return (
+                <BookmarkedVideoLayout key={i} bookmarkedVideo={bv}/>
+            );
+          })}
+        </div>
       </div>
   );
 }
