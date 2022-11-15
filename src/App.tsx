@@ -15,8 +15,6 @@ function App() {
 
   const videos = useSelector(selectBookmarkedVideos);
 
-  console.log(videos);
-
   return (
       <div className="App">
         <Header/>
