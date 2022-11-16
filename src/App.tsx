@@ -6,6 +6,7 @@ import { selectBookmarkedVideos } from "./redux/selectors/bookmarkVideoSelectors
 import { BookmarkedVideoLayout } from "./popup/components/BookmarkedVideoLayout/BookmarkedVideoLayout";
 import { BookmarkedVideo } from "./models/BookmarkedVideo";
 import { Header } from "./popup/components/header/Header";
+import { InfiniteScrollContainer } from "./popup/components/InfiniteScrollContainer";
 
 /**
  * Popup react page
@@ -13,18 +14,10 @@ import { Header } from "./popup/components/header/Header";
  */
 function App() {
 
-  const videos = useSelector(selectBookmarkedVideos);
-
   return (
       <div className="App">
         <Header/>
-        <div className={'bookmarkedVideos'}>
-          {videos && videos.map((bv: BookmarkedVideo, i) => {
-            return (
-                <BookmarkedVideoLayout key={i} bookmarkedVideo={bv}/>
-            );
-          })}
-        </div>
+        <InfiniteScrollContainer/>
       </div>
   );
 }
