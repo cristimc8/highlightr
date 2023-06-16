@@ -5,45 +5,61 @@ import { HighlightrBurgrComponent } from "../contentScript/components/webcompone
 import { BookmarkButtonComponent } from "../contentScript/components/webcomponents/BookmarkButton";
 import { extractElementFromShadow } from "../services/utils/utils";
 
-let injected = false;
+// creating elements
+
+customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
+customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
+const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
+const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
+
 
 export const setupClient = async ({ clientApp }: { clientApp: IHighlightrClient }) => {
   console.log(`Highlightr ${clientApp.version.name}`);
-
-  setTimeout(() => {
-    injectWithChecking();
-  }, 3500);
+  const injectionInterval = setInterval(async () => {
+    await runInjectionLogic(injectionInterval);
+  }, 2000);
 };
 
-const injectWithChecking = () => {
-  if (!injected) {
-    injectBookmarkButton();
+const runInjectionLogic = async (intervalHandle: NodeJS.Timeout) => {
+  if (!window.location.pathname.startsWith("/watch")) {
+    return;
   }
+  const highlightrButton = extractElementFromShadow('highlightr-bookmark-button', 'highlightr-button-container');
+  if (highlightrButton !== null/* && isElementVisible(highlightrButton)*/) {
+    return;
+  }
+
+  const injectionSuccessful = await injectHighlightrWhenLikeButtonsAreLoaded();
 };
 
-// Create an anchor and inject the button wrapped by these
-// redux provider
-const injectBookmarkButton = () => {
-  injected = true;
+/**
+ * Injects the highlightr button when the like buttons are loaded
+ * will return a boolean indicating if the injection was successful
+ */
+const injectHighlightrWhenLikeButtonsAreLoaded = async (): Promise<boolean> => {
   const content = document.getElementById("content");
   let disableContentClickListener = false;
 
-  // creating elements
-  customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
-  customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
 
-  const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
-  const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
+  const topRow = window.document.getElementById('owner');
+  if (!topRow/* || !isElementVisible(topRow)*/) {
+    return false;
+  }
 
-  // inserting elements in DOM
-  document.body.insertBefore(hightlighrBurgrShadow, document.body.firstChild);
-
-  const topLevelButtons = document.getElementById("top-level-buttons-computed");
-  console.log(`ceva: ${topLevelButtons}`);
-  topLevelButtons?.insertBefore(highlightrButtonShadow, topLevelButtons.firstChild);
+  // =========================================================
+  topRow.insertBefore(highlightrButtonShadow, topRow.lastChild);
 
   const highlightrButton = extractElementFromShadow('highlightr-bookmark-button', 'highlightr-button-container');
+  if (!highlightrButton) {
+    return false;
+  }
+
+  document.body.insertBefore(hightlighrBurgrShadow, document.body.lastChild);
+
   const highlightrBurgr = extractElementFromShadow('highlightr-burgr', 'highlightr-burgr');
+  if(!highlightrBurgr) {
+    return false;
+  }
   highlightrButton.onclick = () => {
     if (highlightrBurgr.style.display === "none") {
       highlightrBurgr.style.display = "block";
@@ -54,8 +70,6 @@ const injectBookmarkButton = () => {
     disableContentClickListener = true;
   };
 
-  console.log(highlightrButtonShadow)
-  console.log(hightlighrBurgrShadow)
 
   const contentClicked = () => {
     // close burger menu
@@ -67,4 +81,16 @@ const injectBookmarkButton = () => {
     disableContentClickListener = false;
   };
   content?.addEventListener("click", contentClicked);
+  // =========================================================
+
+  return true;
+
 };
+
+const isElementVisible = (element: HTMLElement): boolean => (
+    element.offsetParent !== null &&
+    element.offsetWidth > 0 &&
+    element.offsetHeight > 0 &&
+    element.style.visibility !== 'hidden' &&
+    element.style.display !== 'none'
+);

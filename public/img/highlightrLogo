@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="216.106 84.345 148.485 199.55" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
-  <defs>
-    <style bx:fonts="Modak">@import url(https://fonts.googleapis.com/css2?family=Modak%3Aital%2Cwght%400%2C400&amp;display=swap);</style>
-  </defs>
-  <rect x="228.772" y="95.337" width="124.922" height="174.617" rx="22" ry="22" style="stroke: rgb(0, 0, 0);"/>
-  <text style="fill: rgb(255, 255, 255); font-family: Modak; font-size: 208.558px; line-height: 261.354px; white-space: pre;" transform="matrix(0.685661, 0, 0, 0.685659, 256.583435, 206.125)">H</text>
-</svg>

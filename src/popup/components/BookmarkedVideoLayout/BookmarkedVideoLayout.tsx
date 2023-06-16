@@ -20,7 +20,7 @@ export const BookmarkedVideoLayout = React.forwardRef((props: { bookmarkedVideo:
           <span className={'bookmarkedVideo__info__title'}>
             {
               props.bookmarkedVideo.title.length > 35 ?
-                  props.bookmarkedVideo.title.substring(0, 35) + '...' :
+                  props.bookmarkedVideo.title.substring(0, 34) + '...' :
                   props.bookmarkedVideo.title
             }
           </span>
@@ -31,6 +31,7 @@ export const BookmarkedVideoLayout = React.forwardRef((props: { bookmarkedVideo:
                     <a href={
                       `${checkpoint.url}`
                     }
+                       key={i}
                        target={'_blank'}>
                       <div
                           key={i}

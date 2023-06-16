@@ -16,7 +16,6 @@ export const InfiniteScrollContainer = () => {
   });
 
   const videos = useSelector(selectBookmarkedVideos);
-  console.log("videos", videos);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 

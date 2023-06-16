@@ -3,6 +3,7 @@ import '../../../App.css';
 
 export const Header = () => {
   const [text, setText] = useState('');
+
     return (
         <div className={'App-header'}>
             <div id={'searchBar'}>

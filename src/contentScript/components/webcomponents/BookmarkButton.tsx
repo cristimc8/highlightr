@@ -25,7 +25,7 @@ export class BookmarkButtonComponent extends WebComponent {
     highlightrButton.style.display = 'flex';
     highlightrButton.style.alignItems = "center";
     highlightrButton.style.paddingBottom = "2px";
-    highlightrButton.style.paddingRight = "12px";
+    highlightrButton.style.paddingLeft = "12px";
 
     return highlightrButton;
   }
