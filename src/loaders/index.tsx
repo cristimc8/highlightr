@@ -1,15 +1,15 @@
 import { IHighlightrClient } from "../types/IHighlightrClient";
 import React from "react";
 import { readyToInject } from "../services/DOMObserver/DOMWatcher";
-import { HighlightrBurgrComponent } from "../contentScript/components/webcomponents/HighlightrBurgr";
+import { HighlightrOverlay } from "../contentScript/components/webcomponents/HighlightrOverlay";
 import { BookmarkButtonComponent } from "../contentScript/components/webcomponents/BookmarkButton";
 import { extractElementFromShadow } from "../services/utils/utils";
 
 // creating elements
 
 customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
-customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
-const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
+// customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
+// const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
 const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
 
 
@@ -54,31 +54,31 @@ const injectHighlightrWhenLikeButtonsAreLoaded = async (): Promise<boolean> => {
     return false;
   }
 
-  document.body.insertBefore(hightlighrBurgrShadow, document.body.lastChild);
+  // document.body.insertBefore(hightlighrBurgrShadow, document.body.lastChild);
 
-  const highlightrBurgr = extractElementFromShadow('highlightr-burgr', 'highlightr-burgr');
-  if(!highlightrBurgr) {
-    return false;
-  }
+  // const highlightrBurgr = extractElementFromShadow('highlightr-burgr', 'highlightr-burgr');
+  // if(!highlightrBurgr) {
+  //   return false;
+  // }
   highlightrButton.onclick = () => {
-    if (highlightrBurgr.style.display === "none") {
-      highlightrBurgr.style.display = "block";
-      if (content) {
-        content.style.opacity = "0.2";
-      }
-    }
+    // if (highlightrBurgr.style.display === "none") {
+    //   highlightrBurgr.style.display = "block";
+    //   if (content) {
+    //     content.style.opacity = "0.2";
+    //   }
+    // }
     disableContentClickListener = true;
   };
 
 
   const contentClicked = () => {
-    // close burger menu
+    /*// close burger menu
     if (highlightrBurgr.style.display === "block" && !disableContentClickListener) {
       highlightrBurgr.style.display = "none";
       // @ts-ignore
       content.style.opacity = "1";
     }
-    disableContentClickListener = false;
+    disableContentClickListener = false;*/
   };
   content?.addEventListener("click", contentClicked);
   // =========================================================
