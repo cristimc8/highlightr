@@ -36,7 +36,15 @@ export const InfiniteScrollContainer = (
     portName: ports.main
   });
 
-  const videos = useSelector(selectBookmarkedVideos);
+  // Patched with this hack because the pagination is messy and duplicates stuff after searching
+  // todo: fix pagination
+  const videos = useSelector(state => {
+    const uniqueVideos = selectBookmarkedVideos(state)?.filter((video, index, self) =>
+        index === self.findIndex((v) => v.url === video.url)
+    );
+    return uniqueVideos;
+  });
+
   const [hasMore, setHasMore] = useState(true);
 
   const observer = useRef<IntersectionObserver>();
