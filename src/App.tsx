@@ -9,10 +9,12 @@ import { InfiniteScrollContainer } from "./popup/components/InfiniteScrollContai
  */
 function App() {
 
+  const [text, setText] = React.useState('');
+
   return (
       <div className="App">
-        <Header/>
-        <InfiniteScrollContainer/>
+        <Header text={text} setText={setText}/>
+        <InfiniteScrollContainer text={text}/>
       </div>
   );
 }

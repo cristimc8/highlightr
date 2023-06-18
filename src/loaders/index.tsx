@@ -18,6 +18,8 @@ export const setupClient = async ({ clientApp }: { clientApp: IHighlightrClient 
   const injectionInterval = setInterval(async () => {
     await runInjectionLogic(injectionInterval);
   }, 2000);
+
+  window.addEventListener("message", handleMessage);
 };
 
 const runInjectionLogic = async (intervalHandle: NodeJS.Timeout) => {
@@ -68,7 +70,7 @@ const injectHighlightrWhenLikeButtonsAreLoaded = async (): Promise<boolean> => {
         ytdApp.style.filter = 'blur(5px)'
       }
     }
-    // make sure the react component is aware of the displayed overlay
+    // make sure the React component is aware of the displayed overlay
     window.postMessage({ type: "OVERLAY_DISPLAY_CHANGE" }, "*");
     disableContentClickListener = true;
   };
@@ -99,3 +101,22 @@ const isElementVisible = (element: HTMLElement): boolean => (
     element.style.visibility !== 'hidden' &&
     element.style.display !== 'none'
 );
+
+const handleMessage = (event: any) => {
+  if (event.data.type === "CLOSE_OVERLAY") {
+    closeOverlay();
+  }
+}
+
+const closeOverlay = () => {
+  const ytdApp = document.querySelectorAll('ytd-app')[0] as HTMLElement;
+
+  const highlightrOverlay = extractElementFromShadow('highlightr-overlay', 'highlightr-overlay');
+  if (highlightrOverlay) {
+    highlightrOverlay.style.display = "none";
+  }
+  if (ytdApp) {
+    ytdApp.style.opacity = '1';
+    ytdApp.style.filter = 'blur(0px)'
+  }
+}

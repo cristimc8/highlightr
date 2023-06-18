@@ -35,6 +35,19 @@ export const listBookmarks = async (
   return [];
 };
 
+export const searchBookmarks = async (
+    query: string,
+    page = 1,
+): Promise<BookmarkedVideo[]> => {
+  const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
+      .reverse();
+  if (bookmarks) {
+    return bookmarks.filter((bookmark) => bookmark.title.toLowerCase().includes(query.toLowerCase()))
+        .slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
+  }
+  return [];
+}
+
 /**
  * Function that returns the value of a certain key stored in chrome synced
  * storage.

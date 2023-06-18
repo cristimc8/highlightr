@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import '../../../App.css';
 
-export const Header = () => {
-  const [text, setText] = useState('');
+export const Header = (
+  props: {
+    text: string;
+    setText: (text: string) => void;
+  }
+) => {
+  const { text, setText } = props;
 
     return (
         <div className={'App-header'}>

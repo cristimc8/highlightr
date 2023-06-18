@@ -14,6 +14,7 @@
 }
 
 .overlay {
+    position: relative;
     background-color: white;
     border-radius: 10px;
     width: 50rem; /* Adjust as needed */
@@ -74,7 +75,7 @@
     position: absolute;
 }
 
-button {
+.button-white {
     cursor: pointer;
     display: inline-block;
     padding: 10px 20px;
@@ -87,4 +88,20 @@ button {
     border: 3px solid #000;
     border-radius: 15px;
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.close-btn {
+    position: absolute;
+    top: 13px;
+    right: 15px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #ff5f56;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: left;
+    cursor: pointer;
 }

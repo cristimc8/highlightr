@@ -6,12 +6,6 @@ import { documentToBookmarkedVideo, getLikeDislikeDivHeight } from "../VideoUtil
 export const BookmarkButton = () => {
   const dispatch = useDispatch();
 
-  const bookmarkVideo = () => {
-    dispatch(
-        addNewBookmark(documentToBookmarkedVideo())
-    );
-  };
-
   return (
       <div style={{ height: `${getLikeDislikeDivHeight()}px`, alignItems: 'center', display: 'flex' }}>
         <img
