@@ -8,9 +8,9 @@ import { extractElementFromShadow } from "../services/utils/utils";
 // creating elements
 
 customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
-// customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
-// const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
+customElements.define('highlightr-overlay', HighlightrOverlay, { extends: 'HTMLElement' });
 const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
+const highlightrOverlayShadow = document.createElement('highlightr-overlay');
 
 
 export const setupClient = async ({ clientApp }: { clientApp: IHighlightrClient }) => {
@@ -37,7 +37,7 @@ const runInjectionLogic = async (intervalHandle: NodeJS.Timeout) => {
  * will return a boolean indicating if the injection was successful
  */
 const injectHighlightrWhenLikeButtonsAreLoaded = async (): Promise<boolean> => {
-  const content = document.getElementById("content");
+  const ytdApp = document.querySelectorAll('ytd-app')[0] as HTMLElement;
   let disableContentClickListener = false;
 
 
@@ -54,33 +54,38 @@ const injectHighlightrWhenLikeButtonsAreLoaded = async (): Promise<boolean> => {
     return false;
   }
 
-  // document.body.insertBefore(hightlighrBurgrShadow, document.body.lastChild);
+  document.body.insertBefore(highlightrOverlayShadow, document.body.lastChild);
 
-  // const highlightrBurgr = extractElementFromShadow('highlightr-burgr', 'highlightr-burgr');
-  // if(!highlightrBurgr) {
-  //   return false;
-  // }
+  const highlightrOverlay = extractElementFromShadow('highlightr-overlay', 'highlightr-overlay');
+  if (!highlightrOverlay) {
+    return false;
+  }
   highlightrButton.onclick = () => {
-    // if (highlightrBurgr.style.display === "none") {
-    //   highlightrBurgr.style.display = "block";
-    //   if (content) {
-    //     content.style.opacity = "0.2";
-    //   }
-    // }
+    if (highlightrOverlay.style.display === "none") {
+      highlightrOverlay.style.display = "block";
+      if (ytdApp) {
+        ytdApp.style.opacity = '0.6';
+        ytdApp.style.filter = 'blur(5px)'
+      }
+    }
+    // make sure the react component is aware of the displayed overlay
+    window.postMessage({ type: "OVERLAY_DISPLAY_CHANGE" }, "*");
     disableContentClickListener = true;
   };
 
 
   const contentClicked = () => {
-    /*// close burger menu
-    if (highlightrBurgr.style.display === "block" && !disableContentClickListener) {
-      highlightrBurgr.style.display = "none";
-      // @ts-ignore
-      content.style.opacity = "1";
+    if (highlightrOverlay.style.display === "block" && !disableContentClickListener) {
+      highlightrOverlay.style.display = "none";
+      if (ytdApp) {
+        ytdApp.style.opacity = '1';
+        ytdApp.style.filter = 'blur(0px)'
+      }
+
     }
-    disableContentClickListener = false;*/
+    disableContentClickListener = false;
   };
-  content?.addEventListener("click", contentClicked);
+  ytdApp?.addEventListener("click", contentClicked);
   // =========================================================
 
   return true;

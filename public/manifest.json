@@ -21,7 +21,7 @@
   ],
   "web_accessible_resources": [{
     "matches": ["*://*.youtube.com/*"],
-    "resources": ["img/magnifying-glass.png", "webstyles/burger-menu.css", "img/disc.png"]
+    "resources": ["img/magnifying-glass.png", "webstyles/overlay.css", "img/disc.png"]
   }],
   "icons": {
     "16": "img/16/disc.png",
