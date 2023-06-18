@@ -28,7 +28,7 @@ export const listBookmarks = async (
     page = 1,
 ): Promise<BookmarkedVideo[]> => {
   const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
-      .reverse();
+      ?.reverse();
   if (bookmarks) {
     return bookmarks.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
   }
@@ -40,7 +40,7 @@ export const searchBookmarks = async (
     page = 1,
 ): Promise<BookmarkedVideo[]> => {
   const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
-      .reverse();
+      ?.reverse();
   if (bookmarks) {
     return bookmarks.filter((bookmark) => bookmark.title.toLowerCase().includes(query.toLowerCase()))
         .slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
