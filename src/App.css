@@ -1,10 +1,32 @@
 .App {
-    width: 470px;
     padding: 0 10px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #131212;
+    min-height: 480px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    background: #131212;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 3px #0d0421;
+    border-radius: 2px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #33A6CA;
+    border-radius: 4px;
+}
+
+#root {
+    width: 470px;
+    height: 480px;
 }
 
 .gradient {
@@ -59,9 +81,8 @@ hr {
 #searchBar {
     width: 400px;
     height: 42px;
-    background: linear-gradient(94.49deg, #232020 26.83%, rgba(58, 52, 52, 0) 104.05%);
+    background: linear-gradient(94.49deg, #232020 26.83%, rgba(58, 52, 52, 0.4) 104.05%);
     border-radius: 10px;
-    cursor: pointer;
     border: none;
     outline: none;
     color: white;
@@ -95,7 +116,6 @@ hr {
     font-size: 16px;
     padding-left: 10px;
     font-family: 'Lato', sans-serif;
-    cursor: pointer;
 }
 
 #searchIcon {

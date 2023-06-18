@@ -12,6 +12,7 @@ export const runHighlightr = async () => {
    */
   const highlightrApp = HighlightrClient();
   await setupClient({ clientApp: highlightrApp });
+  console.log(`Highlightr client loaded for url ${window.location.href}`);
 };
 
 runHighlightr();

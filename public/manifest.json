@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "short_name": "Highlightr",
   "name": "Highlightr",
-  "description": "Sample application showing how to create an extension with Create React App",
+  "description": "Track, resume, and master your YouTube journey. A smart companion for seamless video experiences, ensuring you never miss a beat 🎧",
   "action": {
     "default_title": "Highlightr",
     "default_popup": "popup.html",
-    "default_icon": "img/highlightrLogo.cleaned2.png"
+    "default_icon": "img/disc.png"
   },
   "background": {
     "service_worker": "background.bundle.js"
@@ -21,12 +21,12 @@
   ],
   "web_accessible_resources": [{
     "matches": ["*://*.youtube.com/*"],
-    "resources": ["img/highlightrLetter.png", "img/star.png", "img/magnifying-glass.png", "img/48/highlightrLogo.cleaned.png", "webstyles/burger-menu.css"]
+    "resources": ["img/magnifying-glass.png", "webstyles/overlay.css", "img/disc.png"]
   }],
   "icons": {
-    "16": "img/16/highlightrLogo.cleaned.png",
-    "48": "img/48/highlightrLogo.cleaned.png",
-    "128": "img/128/highlightrLogo.cleaned.png"
+    "16": "img/16/disc.png",
+    "48": "img/48/disc.png",
+    "128": "img/128/disc.png"
   },
   "options_page": "options.html",
   "permissions": ["activeTab", "storage"],

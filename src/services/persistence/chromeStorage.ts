@@ -1,11 +1,13 @@
 import { BookmarkedVideo } from "../../models/BookmarkedVideo";
 import { keys } from "./keys";
 
+const PAGE_SIZE = 4;
+
 /**
  * Updates the bookmarked values by adding this one.
  * @param bookmarked
  */
-export const syncBookmark = async (bookmarked: BookmarkedVideo): Promise<void> => {
+export const addBookmark = async (bookmarked: BookmarkedVideo): Promise<void> => {
   let alreadyBookmarked = await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
   // we need to find if we already have this video id in our bookmarks and update the checkpoints
   if (alreadyBookmarked) {
@@ -22,9 +24,29 @@ export const syncBookmark = async (bookmarked: BookmarkedVideo): Promise<void> =
   await setValueForKey(keys.syncd.bookmarkedVideos, [...(alreadyBookmarked) || [], bookmarked]);
 };
 
-export const getSyncdBookmarks = async (): Promise<BookmarkedVideo[]> => {
-  return await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
+export const listBookmarks = async (
+    page = 1,
+): Promise<BookmarkedVideo[]> => {
+  const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
+      .reverse();
+  if (bookmarks) {
+    return bookmarks.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
+  }
+  return [];
 };
+
+export const searchBookmarks = async (
+    query: string,
+    page = 1,
+): Promise<BookmarkedVideo[]> => {
+  const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
+      .reverse();
+  if (bookmarks) {
+    return bookmarks.filter((bookmark) => bookmark.title.toLowerCase().includes(query.toLowerCase()))
+        .slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
+  }
+  return [];
+}
 
 /**
  * Function that returns the value of a certain key stored in chrome synced
@@ -50,11 +72,11 @@ export function clearLocalStorage() {
       let error = chrome.runtime.lastError;
       if (error) {
         console.error(error);
-        resolve(0)
+        resolve(0);
       }
-      resolve(1)
+      resolve(1);
     });
-  })
+  });
 }
 
 /**

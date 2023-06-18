@@ -1,70 +1,122 @@
 import { IHighlightrClient } from "../types/IHighlightrClient";
 import React from "react";
 import { readyToInject } from "../services/DOMObserver/DOMWatcher";
-import { HighlightrBurgrComponent } from "../contentScript/components/webcomponents/HighlightrBurgr";
+import { HighlightrOverlay } from "../contentScript/components/webcomponents/HighlightrOverlay";
 import { BookmarkButtonComponent } from "../contentScript/components/webcomponents/BookmarkButton";
 import { extractElementFromShadow } from "../services/utils/utils";
 
-let injected = false;
+// creating elements
+
+customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
+customElements.define('highlightr-overlay', HighlightrOverlay, { extends: 'HTMLElement' });
+const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
+const highlightrOverlayShadow = document.createElement('highlightr-overlay');
+
 
 export const setupClient = async ({ clientApp }: { clientApp: IHighlightrClient }) => {
   console.log(`Highlightr ${clientApp.version.name}`);
+  const injectionInterval = setInterval(async () => {
+    await runInjectionLogic(injectionInterval);
+  }, 2000);
 
-  setTimeout(() => {
-    injectWithChecking();
-  }, 3500);
+  window.addEventListener("message", handleMessage);
 };
 
-const injectWithChecking = () => {
-  if (!injected) {
-    injectBookmarkButton();
+const runInjectionLogic = async (intervalHandle: NodeJS.Timeout) => {
+  if (!window.location.pathname.startsWith("/watch")) {
+    return;
   }
+  const highlightrButton = extractElementFromShadow('highlightr-bookmark-button', 'highlightr-button-container');
+  if (highlightrButton !== null/* && isElementVisible(highlightrButton)*/) {
+    return;
+  }
+
+  const injectionSuccessful = await injectHighlightrWhenLikeButtonsAreLoaded();
 };
 
-// Create an anchor and inject the button wrapped by these
-// redux provider
-const injectBookmarkButton = () => {
-  injected = true;
-  const content = document.getElementById("content");
+/**
+ * Injects the highlightr button when the like buttons are loaded
+ * will return a boolean indicating if the injection was successful
+ */
+const injectHighlightrWhenLikeButtonsAreLoaded = async (): Promise<boolean> => {
+  const ytdApp = document.querySelectorAll('ytd-app')[0] as HTMLElement;
   let disableContentClickListener = false;
 
-  // creating elements
-  customElements.define('highlightr-bookmark-button', BookmarkButtonComponent, { extends: 'HTMLElement' });
-  customElements.define('highlightr-burgr', HighlightrBurgrComponent, { extends: 'HTMLElement' });
 
-  const hightlighrBurgrShadow = document.createElement('highlightr-burgr');
-  const highlightrButtonShadow = document.createElement('highlightr-bookmark-button');
+  const topRow = window.document.getElementById('owner');
+  if (!topRow/* || !isElementVisible(topRow)*/) {
+    return false;
+  }
 
-  // inserting elements in DOM
-  document.body.insertBefore(hightlighrBurgrShadow, document.body.firstChild);
-
-  const topLevelButtons = document.getElementById("top-level-buttons-computed");
-  console.log(`ceva: ${topLevelButtons}`);
-  topLevelButtons?.insertBefore(highlightrButtonShadow, topLevelButtons.firstChild);
+  // =========================================================
+  topRow.insertBefore(highlightrButtonShadow, topRow.lastChild);
 
   const highlightrButton = extractElementFromShadow('highlightr-bookmark-button', 'highlightr-button-container');
-  const highlightrBurgr = extractElementFromShadow('highlightr-burgr', 'highlightr-burgr');
+  if (!highlightrButton) {
+    return false;
+  }
+
+  document.body.insertBefore(highlightrOverlayShadow, document.body.lastChild);
+
+  const highlightrOverlay = extractElementFromShadow('highlightr-overlay', 'highlightr-overlay');
+  if (!highlightrOverlay) {
+    return false;
+  }
   highlightrButton.onclick = () => {
-    if (highlightrBurgr.style.display === "none") {
-      highlightrBurgr.style.display = "block";
-      if (content) {
-        content.style.opacity = "0.2";
+    if (highlightrOverlay.style.display === "none") {
+      highlightrOverlay.style.display = "block";
+      if (ytdApp) {
+        ytdApp.style.opacity = '0.6';
+        ytdApp.style.filter = 'blur(5px)'
       }
     }
+    // make sure the React component is aware of the displayed overlay
+    window.postMessage({ type: "OVERLAY_DISPLAY_CHANGE" }, "*");
     disableContentClickListener = true;
   };
 
-  console.log(highlightrButtonShadow)
-  console.log(hightlighrBurgrShadow)
 
   const contentClicked = () => {
-    // close burger menu
-    if (highlightrBurgr.style.display === "block" && !disableContentClickListener) {
-      highlightrBurgr.style.display = "none";
-      // @ts-ignore
-      content.style.opacity = "1";
+    if (highlightrOverlay.style.display === "block" && !disableContentClickListener) {
+      highlightrOverlay.style.display = "none";
+      if (ytdApp) {
+        ytdApp.style.opacity = '1';
+        ytdApp.style.filter = 'blur(0px)'
+      }
+
     }
     disableContentClickListener = false;
   };
-  content?.addEventListener("click", contentClicked);
+  ytdApp?.addEventListener("click", contentClicked);
+  // =========================================================
+
+  return true;
+
 };
+
+const isElementVisible = (element: HTMLElement): boolean => (
+    element.offsetParent !== null &&
+    element.offsetWidth > 0 &&
+    element.offsetHeight > 0 &&
+    element.style.visibility !== 'hidden' &&
+    element.style.display !== 'none'
+);
+
+const handleMessage = (event: any) => {
+  if (event.data.type === "CLOSE_OVERLAY") {
+    closeOverlay();
+  }
+}
+
+const closeOverlay = () => {
+  const ytdApp = document.querySelectorAll('ytd-app')[0] as HTMLElement;
+
+  const highlightrOverlay = extractElementFromShadow('highlightr-overlay', 'highlightr-overlay');
+  if (highlightrOverlay) {
+    highlightrOverlay.style.display = "none";
+  }
+  if (ytdApp) {
+    ytdApp.style.opacity = '1';
+    ytdApp.style.filter = 'blur(0px)'
+  }
+}

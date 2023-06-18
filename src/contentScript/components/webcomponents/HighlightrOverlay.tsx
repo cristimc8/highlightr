@@ -3,10 +3,10 @@ import "@webcomponents/custom-elements";
 import { WebComponent } from "./WebComponent";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
-import { BurgerMenu } from "../BurgerMenu";
+import { Overlay } from "../Overlay";
 import { extractElementFromShadow } from "../../../services/utils/utils";
 
-export class HighlightrBurgrComponent extends WebComponent {
+export class HighlightrOverlay extends WebComponent {
   constructor() {
     super();
   }
@@ -14,23 +14,23 @@ export class HighlightrBurgrComponent extends WebComponent {
   connectedCallback() {
     render(
         <Provider store={this.proxyStore}>
-          <BurgerMenu/>
+          <Overlay/>
         </Provider>
-        , extractElementFromShadow('highlightr-burgr', 'highlightr-burgr'));
+        , extractElementFromShadow('highlightr-overlay', 'highlightr-overlay'));
   }
 
   createShadowStructure(): HTMLElement {
-    const highlightrBurgr = document.createElement('div');
-    highlightrBurgr.id = 'highlightr-burgr';
-    highlightrBurgr.style.display = "none";
+    const highlightrOverlay = document.createElement('div');
+    highlightrOverlay.id = 'highlightr-overlay';
+    highlightrOverlay.style.display = "none";
 
-    return highlightrBurgr;
+    return highlightrOverlay;
   }
 
   createShadowStyle(): HTMLLinkElement | HTMLStyleElement | undefined {
     let myStyle = document.createElement('link');
     myStyle.rel = 'stylesheet';
-    myStyle.href = chrome.runtime.getURL("webstyles/burger-menu.css");
+    myStyle.href = chrome.runtime.getURL("webstyles/overlay.css");
     return myStyle;
   }
 }
