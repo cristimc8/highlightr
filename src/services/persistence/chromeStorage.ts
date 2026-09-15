@@ -7,46 +7,99 @@ const PAGE_SIZE = 4;
  * Updates the bookmarked values by adding this one.
  * @param bookmarked
  */
-export const addBookmark = async (bookmarked: BookmarkedVideo): Promise<void> => {
-  let alreadyBookmarked = await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[];
+export const addBookmark = async (
+  bookmarked: BookmarkedVideo,
+): Promise<void> => {
+  let alreadyBookmarked = (await getValueForKey(
+    keys.syncd.bookmarkedVideos,
+  )) as BookmarkedVideo[];
   // we need to find if we already have this video id in our bookmarks and update the checkpoints
   if (alreadyBookmarked) {
-    const foundIndex = alreadyBookmarked.findIndex((video) => video.videoId === bookmarked.videoId);
+    const foundIndex = alreadyBookmarked.findIndex(
+      (video) => video.videoId === bookmarked.videoId,
+    );
     if (foundIndex !== -1) {
       alreadyBookmarked[foundIndex].checkpoints = [
         ...alreadyBookmarked[foundIndex].checkpoints,
-        ...bookmarked.checkpoints
+        ...bookmarked.checkpoints,
       ];
       await setValueForKey(keys.syncd.bookmarkedVideos, alreadyBookmarked);
       return;
     }
   }
-  await setValueForKey(keys.syncd.bookmarkedVideos, [...(alreadyBookmarked) || [], bookmarked]);
+  await setValueForKey(keys.syncd.bookmarkedVideos, [
+    ...(alreadyBookmarked || []),
+    bookmarked,
+  ]);
 };
 
-export const listBookmarks = async (
-    page = 1,
-): Promise<BookmarkedVideo[]> => {
-  const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
-      ?.reverse();
+export const listBookmarks = async (page = 1): Promise<BookmarkedVideo[]> => {
+  const bookmarks = (
+    (await getValueForKey(keys.syncd.bookmarkedVideos)) as BookmarkedVideo[]
+  )?.reverse();
   if (bookmarks) {
-    return bookmarks.slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
+    return bookmarks.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   }
   return [];
 };
 
 export const searchBookmarks = async (
-    query: string,
-    page = 1,
+  query: string,
+  page = 1,
 ): Promise<BookmarkedVideo[]> => {
-  const bookmarks = (await getValueForKey(keys.syncd.bookmarkedVideos) as BookmarkedVideo[])
-      ?.reverse();
+  const bookmarks = (
+    (await getValueForKey(keys.syncd.bookmarkedVideos)) as BookmarkedVideo[]
+  )?.reverse();
   if (bookmarks) {
-    return bookmarks.filter((bookmark) => bookmark.title.toLowerCase().includes(query.toLowerCase()))
-        .slice((page - 1) * PAGE_SIZE, (page) * PAGE_SIZE);
+    return bookmarks
+      .filter((bookmark) =>
+        bookmark.title.toLowerCase().includes(query.toLowerCase()),
+      )
+      .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   }
   return [];
-}
+};
+
+/**
+ * Removes a previously saved bookmark (and all of its checkpoints) by video id.
+ * @param videoId
+ */
+export const deleteBookmark = async (videoId: string): Promise<void> => {
+  const bookmarks =
+    ((await getValueForKey(
+      keys.syncd.bookmarkedVideos,
+    )) as BookmarkedVideo[]) || [];
+  const updated = bookmarks.filter((bookmark) => bookmark.videoId !== videoId);
+  await setValueForKey(keys.syncd.bookmarkedVideos, updated);
+};
+
+/**
+ * Removes a single checkpoint from a bookmark. If it was the last checkpoint,
+ * the whole bookmark entry is removed too (no point keeping an empty card).
+ * @param videoId
+ * @param checkpointTime
+ */
+export const deleteCheckpoint = async (
+  videoId: string,
+  checkpointTime: number,
+): Promise<void> => {
+  const bookmarks =
+    ((await getValueForKey(
+      keys.syncd.bookmarkedVideos,
+    )) as BookmarkedVideo[]) || [];
+  const updated = bookmarks
+    .map((bookmark) => {
+      if (bookmark.videoId !== videoId) return bookmark;
+      return {
+        ...bookmark,
+        checkpoints: bookmark.checkpoints.filter(
+          (checkpoint) => checkpoint.time !== checkpointTime,
+        ),
+      };
+    })
+    .filter((bookmark) => bookmark.checkpoints.length > 0);
+  await setValueForKey(keys.syncd.bookmarkedVideos, updated);
+};
 
 /**
  * Function that returns the value of a certain key stored in chrome synced
@@ -67,7 +120,7 @@ function getValueForKey(key: string) {
 }
 
 export function clearLocalStorage() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     chrome.storage.local.clear(function () {
       let error = chrome.runtime.lastError;
       if (error) {
@@ -122,7 +175,7 @@ export function setValueForKey(key: string, value: any) {
  * @returns {Promise<unknown>}
  */
 export function getAllStorageEntries() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     chrome.storage.local.get(function (result) {
       resolve(result);
     });
